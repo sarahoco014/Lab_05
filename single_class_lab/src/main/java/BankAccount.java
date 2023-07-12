@@ -8,12 +8,18 @@ public class BankAccount {
     private int accountNumber;
     private double balance;
 
-    public BankAccount(String firstName, String lastName, String dateOfBirth, int accountNumber) {
+    private String accountType;
+
+    private double overdraft;
+
+    public BankAccount(String firstName, String lastName, String dateOfBirth, int accountNumber, String accountType, double overdraft) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.accountNumber = accountNumber;
         this.balance = 0.0;
+        this.accountType = accountType;
+        this.overdraft = overdraft;
     }
 
     public String getFirstName() {
@@ -56,16 +62,37 @@ public class BankAccount {
         this.balance = balance;
     }
 
-    public void deposit(double addBalance) {
-        this.balance += addBalance;
+    public void deposit(double amountToDeposit) {
+        this.balance += amountToDeposit;
     }
 
-    public void withdrawal(double minusBalance) {
-        this.balance -= minusBalance;
+//    public void withdrawal(double amountToWithdraw) {
+//        this.balance -= amountToWithdraw;
+//    }
+
+    public void withdrawal(double amountToWithdraw) {
+        double maxWithdrawal = balance + overdraft;
+        if(amountToWithdraw > maxWithdrawal) {
+            System.out.println("You cannot withdraw that amount of money. Your maximum withdrawal amount is: " + maxWithdrawal);
+        } else {
+            this.balance -= amountToWithdraw;
+        }
     }
 
-    public void payInterest(double interestBalance) {
-        this.balance = balance + (balance * interestBalance/100);
+    public void payInterest() {
+        this.balance = balance + (balance * 2.5/100);
     }
 
+    public void payInterestByAccountType() {
+        if(accountType == "current") {
+            this.balance = balance + (balance * 2.5/100);
+        }
+        if(accountType == "savings") {
+            this.balance = balance + (balance * 5/100);
+        }
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
 }
